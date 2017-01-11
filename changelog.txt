@@ -1,0 +1,14 @@
+/* ===================================================================
+[ Changelog ]
+
+Project:		HPSM, Beter Flow
+Author:			Kenneth
+=================================================================== */
+
+0.1 (2016/01/09)
+- First init of this changelog
+- Currently got the barebones up and running
+-- The script features the "Standard Troubleshoot", ported from the Drupal website.
+
+0.1 (2016/01/10)
+- 

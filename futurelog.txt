@@ -1,0 +1,16 @@
+/* ===================================================================
+[ FutureLog ]
+
+Project:		HPSM, Beter Flow
+Author:			Kenneth
+=================================================================== */
+
+2016/01/10
+- Implement Priorities
+- Port the full Drupal website to this script
+- Split up the original script so functions can be global
+- Make sure the script ALWAYS focus HPSM when running
+-- This currently creates a HUGE bug, which results in either HPSM crashing, 
+or this script running wild on the host computer.
+- Create a stream which outputs a report to a logfile
+-- This so, on a later basis, reports can be formed about which items where used the most
