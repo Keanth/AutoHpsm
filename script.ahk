@@ -166,11 +166,13 @@ standardTroubleshootLayout() {
 		glDescription := DESC
 		glIsSolved := ISSOLVED
 		glPriority := PRIORITYLEVEL
+		; glPriority := 5
 
 		;; Run checks
 		serviceCheck()
 		tagCheck()
 		priorityCheck()
+
 
 		if (%SCRIPTAVAILABLE% == 0) { 
 			glScriptAvailable = Nee
@@ -192,25 +194,32 @@ standardTroubleshoot() {
 	multTab(2)
 	Send, VOBE{tab}ONBEKENDE.GEBRUIKER@VOBE{tab}{space}
 	
-	; add PRIO5 check
-	; =============================
-	multTab(25)
-	Send, {space}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{enter}
-	multTab(19)
-	Send, {Delete}
-	multTabBack(9) ;Service field
-	%glService%
-	Send, {enter}
-	; add PRIO5 check
-	; =============================
+	; ==[ PRIO 5 check ]==
+	if (glPriority == 5) {
+		multTab(24)
+		Send, {space}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{enter}
+		multTab(19)
+		Send, {Delete}
+		multTabBack(7) ; Ends in "Service field"
+		Send, %glService%
+		Send, {enter} ; Ends in "Service Provider"
+		multTab(3)
+	}
+	; ==[ /PRIO 5 check ]==
+	; ==[ PRIO 1-4 check ]==
+	else {
+		multTab(17)
+		Send, %glService%
+		multTab(3)
+	}
+	; ==[ /PRIO 1-4 check ]==
 
-	multTab(17)
-	Send, %glService%
-	multTab(3)
 	Send, %glTag%
 	multTab(5)
 	Send, %glSurName%, %glName% - %glTitleTag% %glTitle%
 	multTab(3)
+	Send, ^a {delete}
+	Send, --VALIDATIE---- {enter}
 	Send, Gebruikersgegevens gevalideerd: Ja {enter}
 	Send, telefoon: %glPhone% {enter}
 	Send, Lokaal/Verdiep: %glFloor% {enter}
@@ -317,12 +326,7 @@ priorityCheck() {
 		glPriority = 3
 	} else if (glPriority == "Priority 4") {
 		glPriority = 4
+	} else if (glPriority == "Priority 5"){
+		glPriority = 5
 	}
-	; } else {
-	; 	glPriority = 5
-	; }
-}
-
-isPrioFive(){
-
 }

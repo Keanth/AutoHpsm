@@ -6,7 +6,7 @@ Author:			Kenneth
 =================================================================== */
 
 2016/01/10
-- Implement Priorities
+* DONE (2017/01/11) Implement Priorities
 - Port the full Drupal website to this script
 - Split up the original script so functions can be global
 - Make sure the script ALWAYS focus HPSM when running
@@ -14,3 +14,9 @@ Author:			Kenneth
 or this script running wild on the host computer.
 - Create a stream which outputs a report to a logfile
 -- This so, on a later basis, reports can be formed about which items where used the most
+
+2016/01/11
+- Outlook open
+-- Open a mail directed to PXS
+-- Auto fill in the body and title
+-- User will still have to add attachments 

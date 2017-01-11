@@ -10,5 +10,5 @@ Author:			Kenneth
 - Currently got the barebones up and running
 -- The script features the "Standard Troubleshoot", ported from the Drupal website.
 
-0.1 (2016/01/10)
-- 
+0.1 (2016/01/11)
+- Added a Priority check, from now on you'll be able to specify the priority
