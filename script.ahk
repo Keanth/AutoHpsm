@@ -240,7 +240,14 @@ standardTroubleshoot() {
 	Send, %glDescription%
 
 	Send, ^{tab}{tab}
-	Send, incident{tab}{tab}application{tab}{tab}performance degradation{tab}{tab}{tab}%glPriority%{tab}
+	Send, incident{tab}{tab}application{tab}{tab}performance degradation{tab}{tab}
+
+	if (glPriority == 3 || glPriority == 4 || glPriority == 5) {
+		Send, {tab}%glPriority%{tab}
+	} else {
+		Send, %glPriority%{tab}%glPriority%{tab}
+	}
+
 	if (glIsSolved == 1)
 	{
 		multTab(4)
