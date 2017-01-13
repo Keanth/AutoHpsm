@@ -16,3 +16,17 @@ FindVobe() {
 		Send ^c
 	}	
 }
+
+
+^l::
+	multTabControl(10)
+Return
+
+multTabControl(count) {
+	str:=
+	loop, %count% {
+		str := str . "^{tab}"
+	}
+
+	Send, %str%
+}

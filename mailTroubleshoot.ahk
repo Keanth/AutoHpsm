@@ -102,18 +102,10 @@ mailTroubleshootLayout() {
 		priorityCheck()
 		serviceCheck()
 
-
+		troubleshootSendTop()
 		mailTroubleshoot()
-
-		; if (%SCRIPTAVAILABLE% == 0) { 
-		; 	glScriptAvailable = Nee
-		; 	mailTroubleshoot()
-		; }
-		; else { 
-		; 	Gui Destroy
-		; 	scriptCheck()
-		; }
-
+		troubleshootSendBottom()
+		
 		return
 	
 	}	
@@ -121,38 +113,6 @@ mailTroubleshootLayout() {
 
 ; Function which fills in the text for the "Standard Troubleshoot"
 mailTroubleshoot() {
-	; Make sure HPSM is active
-	IfWinExist, HP Service Manager 
-	    WinActivate ; use the window found above
-	else 
-	    ExitApp
-
-	Send, {tab}{tab}{Down}{Enter}
-	multTab(2)
-	Send, VOBE{tab}EXTERNE.GEBRUIKER@VOBE{tab}{space}
-	
-	if (glPriority == 5) {
-		multTab(24)
-		Send, {space}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{enter}
-		multTab(19)
-		Send, {Delete}
-		Send, %glService%
-	}
-	else {
-		multTab(17)
-		Send, %glService%
-	}
-
-	FindVobe()
-	multTab(16)
-	Sleep, 1500 
-
-	Send, %glTag%
-	FindVobe() 
-	multTab(22)
-	Send, %glSurName%, %glName% - %glTitleTag% %glTitle%
-	multTab(3)
-	Send, ^a {delete}
 	Send, --VALIDATIE---- {enter}
 	Send, Naam: %glSurName%, %glName% {enter}
 	Send, telefoon: %glPhone% {enter}
@@ -172,31 +132,4 @@ mailTroubleshoot() {
 	Send, {enter}
 	Send, ---OMSCHRIJVING PROBLEEM--- {enter}
 	Send, %glDescription%
-
-	Send, ^{tab}{tab}
-	Send, incident{tab}{tab}application{tab}{tab}performance degradation{tab}{tab}
-
-	if (glPriority == 3 || glPriority == 4 || glPriority == 5) {
-		Send, {tab}%glPriority%{tab}
-	} else {
-		Send, %glPriority%{tab}%glPriority%{tab}
-	}
-
-	if (glIsSolved == 1)
-	{
-		multTab(4)
-		Send, Solved
-		multTab(6)
-		Send, %glDescription%
-		Send, {enter}
-		Send, GAS
-		multTabBack(43)
-	} 
-	else 
-	{
-		multTabBack(33)
-	}
-	Send, ^a
-	Send, %glSurName%, %glName% 
-	Send, {tab}{space}
 }

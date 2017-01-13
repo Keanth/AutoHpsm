@@ -21,7 +21,7 @@ standardTroubleshootLayout() {
 	columnGutter:="x30"
 	rowGutter:="y30"
 
-	Gui, Show, w500 h600, :D
+	Gui, Show, w500 h670, :D
 
 	;==[ FIRST COLLUMN ]==
 	Gui, Add, Text, %columnGutter% y30 Left, Achternaam?
@@ -34,6 +34,7 @@ standardTroubleshootLayout() {
 	TextRadio2_2 := "Windows"
 	TextRadio2_3 := "Outlook"
 	TextRadio2_4 := "Leeg laten"
+	Gui, Add, Text, Left, Service?
 	Gui, Add, Radio, vSERVICE , %TextRadio2_1%
 	Gui, Add, Radio, , %TextRadio2_2%
 	Gui, Add, Radio, , %TextRadio2_3%
@@ -42,19 +43,30 @@ standardTroubleshootLayout() {
 	Gui, Add, Edit, %columnWidth% vTAG Left
 	Gui, Add, Text, Left, Lokaal / Verdiep?
 	Gui, Add, Edit, %columnWidth% vFLOOR Left
-	
-	;==[ SECOND COLLUMN ]==
 	TextRadio1_1 := "Unmanaged"
 	TextRadio1_2 := "Basis"
 	TextRadio1_3 := "Uitgebreid"
 	TextRadio1_4 := "Niet gekend"
-	Gui, Add, Text, %rowGutter% x265 Left, BHV?
+	Gui, Add, Text, Left, BHV?
 	Gui, Add, Radio, vBHV , %TextRadio1_1%
 	Gui, Add, Radio, , %TextRadio1_2%
 	Gui, Add, Radio, , %TextRadio1_3%
 	Gui, Add, Radio, , %TextRadio1_4%
-	Gui, Add, Text, Left, Script aanwezig?
-	Gui, Add, Checkbox, vSCRIPTAVAILABLE, Ja
+
+	;==[ SECOND COLLUMN ]==
+	Gui, Add, Text, %rowGutter% x265 Left, Script aanwezig?
+	Gui, Add, Checkbox, vSPLICE gSplice, Ja
+	Gui, Add, Text, Left , Script ID:
+	Gui, Add, Edit, %columnWidth% vSCRIPTID, %scriptID%
+	Gui, Add, Text, Left, Script gevolgd?
+	Gui, Add, Edit, %columnWidth% vSCRIPTFOLLOW, %scriptFollow%
+	Gui, Add, Text, Left, Uitkomst Script?
+	Gui, Add, Edit, %columnWidth% r3 vSCRIPTRESULT, %scriptResult%
+
+	GuiControl, disable, SCRIPTID
+	GuiControl, disable, SCRIPTFOLLOW
+	GuiControl, disable, SCRIPTRESULT
+
 	TextRadio3_1 := "Priority 1"
 	TextRadio3_2 := "Priority 2"
 	TextRadio3_3 := "Priority 3"
@@ -68,15 +80,26 @@ standardTroubleshootLayout() {
 	Gui, Add, Radio, , %TextRadio3_5%
 
 	;==[ BOTTOM ROW ]==
-	Gui, Add, Text, %columnGutter% y350 w440 Center, Korte omschrijving probleem?
+	Gui, Add, Text, %columnGutter% y450 w440 Center, Korte omschrijving probleem?
 	Gui, Add, Edit, w440 Left vTITLE
 	Gui, Add, Text, w440 Center, Uitgebreide omschrijving probleem?
 	Gui, Add, Edit, r5 w440 Left vDESC
 
-	Gui, Add, Text, x30 y565 Left, Solved?
-	Gui, Add, Checkbox, x80 y565 Left vISSOLVED 
-	Gui, Add, Button, x130 y550 w340 h40 vSTANDARDTROUBLESHOOTBUTTON gSTANDARDTROUBLESHOOTBUTTON Center, Press me
+	Gui, Add, Text, x30 y625 Left, Solved?
+	Gui, Add, Checkbox, x80 y625 Left vISSOLVED 
+	Gui, Add, Button, x130 y610 w340 h40 vSTANDARDTROUBLESHOOTBUTTON gSTANDARDTROUBLESHOOTBUTTON Center, Press me
 	return
+
+	SPLICE:
+	Gui, Submit, NoHide
+	GuiControl, %    Splice ? "Enable" : "Disable", SCRIPTID
+	GuiControl, , SCRIPTID, %    Splice ? "" : ""
+	GuiControl, %    Splice ? "Enable" : "Disable", SCRIPTFOLLOW
+	GuiControl, , SCRIPTFOLLOW, %    Splice ? "" : ""
+	GuiControl, %    Splice ? "Enable" : "Disable", SCRIPTRESULT
+	GuiControl, , SCRIPTRESULT, %    Splice ? "" : ""
+	return
+
 
 	STANDARDTROUBLESHOOTBUTTON:
 	{
@@ -92,68 +115,31 @@ standardTroubleshootLayout() {
 		glDescription := DESC
 		glIsSolved := ISSOLVED
 		glPriority := PRIORITYLEVEL
-		; glPriority := 5
+		glScriptId := SCRIPTID
+		glScriptfollow := SCRIPTFOLLOW
+		glScriptResult := SCRIPTRESULT
+
+		if (%SCRIPTAVAILABLE% == 0) 
+			glScriptAvailable = Nee
+		else 
+			glScriptAvailable = Ja
 
 		;; Run checks
 		tagCheck()
 		priorityCheck()
 		serviceCheck()
 
+		troubleshootSendTop()
+		standardTroubleshoot()
+		troubleshootSendBottom()
 
-		if (%SCRIPTAVAILABLE% == 0) { 
-			glScriptAvailable = Nee
-			standardTroubleshoot()
-		}
-		else { 
-			Gui Destroy
-			scriptCheck()
-		}
-
+		gui Destroy
 		return
-	
 	}	
 }
 
 ; Function which fills in the text for the "Standard Troubleshoot"
 standardTroubleshoot() {
-	; Make sure HPSM is active
-	IfWinExist, HP Service Manager 
-	    WinActivate ; use the window found above
-	else 
-	    ExitApp
-
-	Send, {tab}{tab}{Down}{Enter}
-	multTab(2)
-	Send, VOBE{tab}EXTERNE.GEBRUIKER@VOBE{tab}{space}
-	
-	if (glPriority == 5) {
-		multTab(24)
-		Send, {space}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{enter}
-		multTab(19)
-		Send, {Delete}
-		multTabBack(7) 
-		Send, %glService%		
-	}
-	else {
-		multTab(17)
-		Send, %glService%
-	}
-
-	FindVobe()
-	multTab(16)
-	Sleep, 1500 
-
-	Send, %glTag%
-	FindVobe() 
-	if (glPriority == 5) {
-		multTab(22) 
-	}
-	else {
-		multTab(21) 
-	}
-	Send, %glSurName%, %glName% - %glTitleTag% %glTitle%
-	multTab(3)
-	Send, ^a {delete}
 	Send, --VALIDATIE---- {enter}
 	Send, Gebruikersgegevens gevalideerd: Ja {enter}
 	Send, telefoon: %glPhone% {enter}
@@ -173,31 +159,4 @@ standardTroubleshoot() {
 	Send, {enter}
 	Send, ---OMSCHRIJVING PROBLEEM--- {enter}
 	Send, %glDescription%
-
-	Send, ^{tab}{tab}
-	Send, incident{tab}{tab}application{tab}{tab}performance degradation{tab}{tab}
-
-	if (glPriority == 3 || glPriority == 4 || glPriority == 5) {
-		Send, {tab}%glPriority%{tab}
-	} else {
-		Send, %glPriority%{tab}%glPriority%{tab}
-	}
-
-	if (glIsSolved == 1)
-	{
-		multTab(4)
-		Send, Solved
-		multTab(6)
-		Send, %glDescription%
-		Send, {enter}
-		Send, GAS
-		multTabBack(43)
-	} 
-	else 
-	{
-		multTabBack(33)
-	}
-	Send, ^a
-	Send, %glSurName%, %glName% 
-	Send, {tab}{space}
 }
