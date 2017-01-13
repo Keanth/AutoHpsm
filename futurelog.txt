@@ -8,8 +8,8 @@ Author:			Kenneth
 2016/01/10
 * DONE (2017/01/11) Implement Priorities
 - Port the full Drupal website to this script
-- Split up the original script so functions can be global
-- Make sure the script ALWAYS focus HPSM when running
+* DONE (2017/01/12) Split up the original script so functions can be global
+* DONE (2017/01/12) Make sure the script ALWAYS focus HPSM when running
 -- This currently creates a HUGE bug, which results in either HPSM crashing, 
 or this script running wild on the host computer.
 - Create a stream which outputs a report to a logfile

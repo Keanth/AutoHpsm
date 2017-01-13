@@ -1,5 +1,5 @@
 ; ===================================================================
-; [ Standard Troubleshoot ]
+; [ Mail Troubleshoot ]
 
 ; Project:			HPSM, Beter Flow
 ; Author:			Kenneth
@@ -13,7 +13,7 @@
 ; ============================
 
 ; Function that generates the layout for the "Standard Troubleshoot"
-standardTroubleshootLayout() {
+mailTroubleshootLayout() {
 	global
 	Gui, Destroy
 
@@ -28,6 +28,8 @@ standardTroubleshootLayout() {
 	Gui, Add, Edit, %columnWidth% vSURNAME Left
 	Gui, Add, Text, Left, Voornaam?
 	Gui, Add, Edit, %columnWidth% vNAME Left
+	Gui, Add, Text, Left, E-mailadres?
+	Gui, Add, Edit, %columnWidth% vEMAIL Left
 	Gui, Add, Text, Left, Telefoonnummer?
 	Gui, Add, Edit, %columnWidth% vPHONE Left
 	TextRadio2_1 := "Software"
@@ -40,8 +42,8 @@ standardTroubleshootLayout() {
 	Gui, Add, Radio, , %TextRadio2_4%
 	Gui, Add, Text,  Left, Tagnummer?
 	Gui, Add, Edit, %columnWidth% vTAG Left
-	Gui, Add, Text, Left, Lokaal / Verdiep?
-	Gui, Add, Edit, %columnWidth% vFLOOR Left
+	; Gui, Add, Text, Left, Lokaal / Verdiep?
+	; Gui, Add, Edit, %columnWidth% vFLOOR Left
 	
 	;==[ SECOND COLLUMN ]==
 	TextRadio1_1 := "Unmanaged"
@@ -53,8 +55,8 @@ standardTroubleshootLayout() {
 	Gui, Add, Radio, , %TextRadio1_2%
 	Gui, Add, Radio, , %TextRadio1_3%
 	Gui, Add, Radio, , %TextRadio1_4%
-	Gui, Add, Text, Left, Script aanwezig?
-	Gui, Add, Checkbox, vSCRIPTAVAILABLE, Ja
+	; Gui, Add, Text, Left, Script aanwezig?
+	; Gui, Add, Checkbox, vSCRIPTAVAILABLE, Ja
 	TextRadio3_1 := "Priority 1"
 	TextRadio3_2 := "Priority 2"
 	TextRadio3_3 := "Priority 3"
@@ -75,16 +77,17 @@ standardTroubleshootLayout() {
 
 	Gui, Add, Text, x30 y565 Left, Solved?
 	Gui, Add, Checkbox, x80 y565 Left vISSOLVED 
-	Gui, Add, Button, x130 y550 w340 h40 vSTANDARDTROUBLESHOOTBUTTON gSTANDARDTROUBLESHOOTBUTTON Center, Press me
+	Gui, Add, Button, x130 y550 w340 h40 vMAILTROUBLESHOOTBUTTON gMAILTROUBLESHOOTBUTTON Center, Press me
 	return
 
-	STANDARDTROUBLESHOOTBUTTON:
+	MAILTROUBLESHOOTBUTTON:
 	{
 		Gui, Submit ;; Pull in all the variables to their global representative
 		glSurName := SURNAME
 		glName := NAME
 		glPhone := PHONE
-		glFloor := FLOOR
+		glMail := EMAIL
+		; glFloor := FLOOR
 		glService := TextRadio2_%SERVICE%
 		glTag := TAG
 		glBhv := TextRadio1_%BHV%
@@ -100,14 +103,16 @@ standardTroubleshootLayout() {
 		serviceCheck()
 
 
-		if (%SCRIPTAVAILABLE% == 0) { 
-			glScriptAvailable = Nee
-			standardTroubleshoot()
-		}
-		else { 
-			Gui Destroy
-			scriptCheck()
-		}
+		mailTroubleshoot()
+
+		; if (%SCRIPTAVAILABLE% == 0) { 
+		; 	glScriptAvailable = Nee
+		; 	mailTroubleshoot()
+		; }
+		; else { 
+		; 	Gui Destroy
+		; 	scriptCheck()
+		; }
 
 		return
 	
@@ -115,7 +120,7 @@ standardTroubleshootLayout() {
 }
 
 ; Function which fills in the text for the "Standard Troubleshoot"
-standardTroubleshoot() {
+mailTroubleshoot() {
 	; Make sure HPSM is active
 	IfWinExist, HP Service Manager 
 	    WinActivate ; use the window found above
@@ -131,8 +136,7 @@ standardTroubleshoot() {
 		Send, {space}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{enter}
 		multTab(19)
 		Send, {Delete}
-		multTabBack(7) 
-		Send, %glService%		
+		Send, %glService%
 	}
 	else {
 		multTab(17)
@@ -145,29 +149,24 @@ standardTroubleshoot() {
 
 	Send, %glTag%
 	FindVobe() 
-	if (glPriority == 5) {
-		multTab(22) 
-	}
-	else {
-		multTab(21) 
-	}
+	multTab(22)
 	Send, %glSurName%, %glName% - %glTitleTag% %glTitle%
 	multTab(3)
 	Send, ^a {delete}
 	Send, --VALIDATIE---- {enter}
-	Send, Gebruikersgegevens gevalideerd: Ja {enter}
+	Send, Naam: %glSurName%, %glName% {enter}
 	Send, telefoon: %glPhone% {enter}
-	Send, Lokaal/Verdiep: %glFloor% {enter}
-	Send, Bereikbaarheid: 16:00 {enter}
+	Send, E-mailadres: %glMail% {enter}
+	Send, Tagnummer: %glTag% {enter}
 	Send, BHV HPSM: %glBhv% {enter}
-	Send, Priomatrix gevolgd: Ja {enter}
-	Send, Hot Transfer? Nee {enter}
+	; Send, Priomatrix gevolgd: Ja {enter}
+	; Send, Hot Transfer? Nee {enter}
 	Send, {enter}
-	Send, ---KNOWLEDGE--- {enter}
-	Send, Script aanwezig: %glScriptAvailable% {enter}
-	Send, Script ID?: %glScriptId% {enter}
-	Send, Script gevolgd: %glScriptfollow% {enter}
-	Send, Uitkomst script: %glScriptResult% {enter}
+	; Send, ---KNOWLEDGE--- {enter}
+	; Send, Script aanwezig: %glScriptAvailable% {enter}
+	; Send, Script ID?: %glScriptId% {enter}
+	; Send, Script gevolgd: %glScriptfollow% {enter}
+	; Send, Uitkomst script: %glScriptResult% {enter}
 	Send, ---OWNERID--- {enter}
 	Send, 50050113 {enter}
 	Send, {enter}

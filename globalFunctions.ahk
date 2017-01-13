@@ -1,5 +1,58 @@
+; ===================================================================
+; [ Global Functions]
+
+; Project:			HPSM, Beter Flow
+; Author:			Kenneth
+; ===================================================================
+
+; [ GLOBAL VARIABLES ]
+; ============================
+global glSurName:=""
+global glName:=""
+global glPhone:=""
+global glMail:=""
+global glFloor:=""
+global glService:=""
+global glTag:=1
+global glTitleTag:=""
+global glBhv:=""
+global glPriority:=""
+global glScriptAvailable:=""
+global glScriptId:=""
+global glScriptfollow:=""
+global glScriptResult:=""
+global glTitle:=""
+global glDescription:=""
+global glIsSolved:=""
+
+global glReport:="" ;; Implement later
+
 ; [ FUNCTIONS ]
 ; ============================
+
+; Creates the initial window to select the correct troubleshoot
+createInitWindow() {
+	global
+	Gui, Destroy
+	Gui, Show, w500 h500, :D
+
+	Gui, Add, Button, x30 y30 w440 h60 vSTANDAARDTROUBLESHOOT gSTANDAARDTROUBLESHOOT Center, Standaard Troubleshoot
+	Gui, Add, Button, w440 h60 vMAILTROUBLESHOOT gMAILTROUBLESHOOT Center, Mail Troubleshoot
+	Return
+	STANDAARDTROUBLESHOOT:
+	{
+		Gui, Submit
+		standardTroubleshootLayout()
+		return
+	}
+	MAILTROUBLESHOOT:
+	{
+		Gui, Submit
+		mailTroubleshootLayout()
+		return
+	}
+	return
+}
 
 ; Function to tab forward a %count% amount of steps
 multTab(count) {
@@ -54,11 +107,20 @@ scriptCheck() {
 ; Checks what the service is, and sets its accordingly
 serviceCheck() {
 	if (glService == "Software") {
-		glService = wpaas - software (vobe){tab}{space}
+		if (glPriority != 5)
+			glService = wpaas - software (vobe){tab}{space}
+		else
+			glService = wpaas - software (vobe)
 	} else if (glService == "Windows") {
-		glService = wpaas - windows 7 (vobe){tab}{space}
+		if (glPriority != 5)
+			glService = wpaas - windows 7 (vobe){tab}{space}
+		else
+			glService = wpaas - windows 7 (vobe)
 	} else if (glService == "Outlook") {
-		glService = wpaas - outlook (vobe){tab}{space}
+		if (glPriority != 5)
+			glService = wpaas - outlook (vobe){tab}{space}
+		else
+			glService = wpaas - outlook (vobe)
 	} else if (glService == "Leeg laten") {
 		glService = {tab}+{tab}	
 	} else {
@@ -76,7 +138,7 @@ tagCheck() {
 		glTitleTag := ""
 	} else {
 		glTitleTag = %glTag% -
-		glTag = %glTag%{tab}{space}
+		glTag = %glTag% ;{tab}{space}
 	}
 }
 
@@ -92,5 +154,20 @@ priorityCheck() {
 		glPriority = 4
 	} else if (glPriority == "Priority 5"){
 		glPriority = 5
+	}
+}
+
+; A function which finds the location of VOBE
+FindVobe() {
+	Loop, 20 {
+		Send, ^+{tab}
+		clipboard = 
+		Send ^a
+		Send ^c
+		ClipWait, 1
+		if (clipboard == "VOBE") {
+			Sleep, 1000 
+			Break
+		}
 	}
 }
