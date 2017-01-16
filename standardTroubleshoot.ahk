@@ -119,6 +119,11 @@ standardTroubleshootLayout() {
 		glScriptfollow := SCRIPTFOLLOW
 		glScriptResult := SCRIPTRESULT
 
+		;; Dump everthing
+		GuiControl,,SCRIPTID,
+		GuiControl,,SCRIPTFOLLOW,
+		GuiControl,,SCRIPTRESULT,
+
 		if (%SCRIPTAVAILABLE% == 0) 
 			glScriptAvailable = Nee
 		else 
@@ -129,10 +134,14 @@ standardTroubleshootLayout() {
 		priorityCheck()
 		serviceCheck()
 
+		;; Run troubleshoot text
 		troubleshootSendTop()
 		standardTroubleshoot()
 		troubleshootSendBottom()
 
+		;; Kill the Gui | Bye bye
+		Sleep, 2000
+		byeBye()
 		gui Destroy
 		return
 	}	

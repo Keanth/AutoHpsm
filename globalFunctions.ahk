@@ -85,37 +85,7 @@ multTabBack(count) {
 	Send, %str%
 }
 
-; Checks whether the script is available
-; scriptCheck() {
-; 	global
-; 	Gui, Show, w500 h500, :P
-; 	Gui, Add, Text, x10 y10 w480 y10 Left, Script ID?
-; 	Gui, Add, Edit, w480 h19 x10 y30 vSCRIPTID Left
-; 	Gui, Add, Text, x10 y10 w480 y50 Left, Script gevolgd?
 
-; 	ScriptRadio1_1 := "Ja"
-; 	ScriptRadio1_2 := "Nee"
-; 	Gui, Add, Radio, x10 y70 vSCRIPTFOLLOW , %ScriptRadio1_1%
-; 	Gui, Add, Radio, x70 y70, %ScriptRadio1_2%
-; 	Gui, Add, Text, x10 y10 w480 y90 Left, Uitkomst Script?
-; 	Gui, Add, Edit, r5 w480 h200 x10 y110 vSCRIPTRESULT Left
-; 	Gui, Add, Button, x10 y190 w90 h40 vMYSCRIPTBUTTON gSCRIPTBUTTON Center, Press me
-; 	return
-
-; 	SCRIPTBUTTON:
-; 	{
-; 		Gui, Submit
-; 		glScriptId := SCRIPTID
-; 		glScriptfollow := SCRIPTFOLLOW
-; 		glScriptResult := SCRIPTRESULT
-		
-; 		troubleshootSendTop()
-; 		standardTroubleshoot()
-; 		troubleshootSendBottom()
-; 	}
-
-; 	return
-; }
 
 ; Checks what the service is, and sets its accordingly
 serviceCheck() {
@@ -263,4 +233,8 @@ troubleshootSendBottom() {
 	Send, ^a
 	Send, %glSurName%, %glName% 
 	Send, {tab}{space}
+}
+
+byeBye() {
+	MsgBox, , Done and Done, Script is done running.`nYour life got 30`% easier.`n`nYou're welcome., 5
 }
