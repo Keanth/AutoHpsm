@@ -1,5 +1,5 @@
 ; ===================================================================
-; [ Standard Troubleshoot ]
+; [ VPN Troubleshoot ]
 
 ; Project:			HPSM, Beter Flow
 ; Author:			Kenneth
@@ -13,7 +13,7 @@
 ; ============================
 
 ; Function that generates the layout for the "Standard Troubleshoot"
-standardTroubleshootLayout() {
+vpnTroubleshootLayout() {
 	global
 	Gui, Destroy
 
@@ -55,7 +55,7 @@ standardTroubleshootLayout() {
 
 	;==[ SECOND COLLUMN ]==
 	Gui, Add, Text, %rowGutter% x265 Left, Script aanwezig?
-	Gui, Add, Checkbox, vSCRIPTAVAILABLE vSTANDARDTROUBLESHOOTSPLICE gSTANDARDTROUBLESHOOTSPLICE, Ja
+	Gui, Add, Checkbox, vSCRIPTAVAILABLE vVPNTROUBLESHOOTSPLICE gVPNTROUBLESHOOTSPLICE, Ja
 	Gui, Add, Text, Left , Script ID:
 	Gui, Add, Edit, %columnWidth% vSCRIPTID, %scriptID%
 	Gui, Add, Text, Left, Script gevolgd?
@@ -87,21 +87,21 @@ standardTroubleshootLayout() {
 
 	Gui, Add, Text, x30 y625 Left, Solved?
 	Gui, Add, Checkbox, x80 y625 Left vISSOLVED 
-	Gui, Add, Button, x130 y610 w340 h40 vSTANDARDTROUBLESHOOTBUTTON gSTANDARDTROUBLESHOOTBUTTON Center, Press me
+	Gui, Add, Button, x130 y610 w340 h40 vVPNTROUBLESHOOTBUTTON gVPNTROUBLESHOOTBUTTON Center, Press me
 	return
 
-	STANDARDTROUBLESHOOTSPLICE:
-	Gui, Submit, NoHide
-	GuiControl, %    STANDARDTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTID
-	GuiControl, , SCRIPTID, %    STANDARDTROUBLESHOOTSPLICE ? "" : ""
-	GuiControl, %    STANDARDTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTFOLLOW
-	GuiControl, , SCRIPTFOLLOW, %    STANDARDTROUBLESHOOTSPLICE ? "" : ""
-	GuiControl, %    STANDARDTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTRESULT
-	GuiControl, , SCRIPTRESULT, %    STANDARDTROUBLESHOOTSPLICE ? "" : ""
+	VPNTROUBLESHOOTSPLICE:
+	Gui, Submit, NoHide[]
+	GuiControl, %    VPNTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTID
+	GuiControl, , SCRIPTID, %    VPNTROUBLESHOOTSPLICE ? "" : ""
+	GuiControl, %    VPNTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTFOLLOW
+	GuiControl, , SCRIPTFOLLOW, %    VPNTROUBLESHOOTSPLICE ? "" : ""
+	GuiControl, %    VPNTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTRESULT
+	GuiControl, , SCRIPTRESULT, %    VPNTROUBLESHOOTSPLICE ? "" : ""
 	return
 
 
-	STANDARDTROUBLESHOOTBUTTON:
+	VPNTROUBLESHOOTBUTTON:
 	{
 		Gui, Submit ;; Pull in all the variables to their global representative
 		glSurName := SURNAME
@@ -129,10 +129,6 @@ standardTroubleshootLayout() {
 		else 
 			glScriptAvailable = Ja
 
-
-		; msgbox %SCRIPTAVAILABLE%
-		; ExitApp
-
 		;; Run checks
 		tagCheck()
 		priorityCheck()
@@ -140,7 +136,7 @@ standardTroubleshootLayout() {
 
 		;; Run troubleshoot text
 		troubleshootSendTop()
-		standardTroubleshoot()
+		vpnTroubleshoot()
 		troubleshootSendBottom()
 
 		;; Kill the Gui | Bye bye
@@ -151,8 +147,8 @@ standardTroubleshootLayout() {
 	}	
 }
 
-; Function which fills in the text for the "Standard Troubleshoot"
-standardTroubleshoot() {
+; Function which fills in the text for the "VPN Troubleshoot"
+vpnTroubleshoot() {
 	Send, --VALIDATIE---- {enter}
 	Send, Gebruikersgegevens gevalideerd: Ja {enter}
 	Send, telefoon: %glPhone% {enter}

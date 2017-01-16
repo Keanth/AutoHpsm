@@ -95,7 +95,6 @@ mailTroubleshootLayout() {
 		glDescription := DESC
 		glIsSolved := ISSOLVED
 		glPriority := PRIORITYLEVEL
-		; glPriority := 5
 
 		;; Run checks
 		tagCheck()

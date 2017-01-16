@@ -37,7 +37,9 @@ createInitWindow() {
 	Gui, Show, w500 h500, :D
 
 	Gui, Add, Button, x30 y30 w440 h60 vSTANDAARDTROUBLESHOOT gSTANDAARDTROUBLESHOOT Center, Standaard Troubleshoot
+	Gui, Add, Button, w440 h60 vVPNTROUBLESHOOT gVPNTROUBLESHOOT Center, VPN Troubleshoot
 	Gui, Add, Button, w440 h60 vMAILTROUBLESHOOT gMAILTROUBLESHOOT Center, Mail Troubleshoot
+	
 	Return
 	STANDAARDTROUBLESHOOT:
 	{
@@ -49,6 +51,12 @@ createInitWindow() {
 	{
 		Gui, Submit
 		mailTroubleshootLayout()
+		return
+	}
+	VPNTROUBLESHOOT:
+	{
+		Gui, Submit
+		vpnTroubleshootLayout()
 		return
 	}
 	return
@@ -84,8 +92,6 @@ multTabBack(count) {
 
 	Send, %str%
 }
-
-
 
 ; Checks what the service is, and sets its accordingly
 serviceCheck() {
@@ -143,14 +149,30 @@ priorityCheck() {
 ; A function which finds the location of VOBE
 FindVobe() {
 	Loop, 20 {
-		Send, ^+{tab}
 		clipboard = 
 		Send ^a
 		Send ^c
 		ClipWait, 1
 		if (clipboard == "VOBE") {
-			Sleep, 1000 
+			Sleep, 750 
 			Break
+		} else {
+			Send, ^+{tab}
+		}
+	}
+}
+
+FindVobeForward() {
+	Loop, 20 {
+		clipboard = 
+		Send ^a
+		Send ^c
+		ClipWait, 1
+		if (clipboard == "VOBE") {
+			Sleep, 750 
+			Break
+		} else {
+			Send, ^{tab}
 		}
 	}
 }
@@ -165,21 +187,21 @@ troubleshootSendTop() {
 	Send, {tab}{tab}{Down}{Enter}
 	multTab(2)
 	Send, VOBE{tab}EXTERNE.GEBRUIKER@VOBE{tab}{space}
+	FindVobeForward()
 	
 	if (glPriority == 5) {
-		multTab(24)
+		multTab(21)
 		Send, {space}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{enter}
 		multTab(19)
 		Send, {Delete}
-		multTabBack(7) 
-		Sleep, 1000 
-		Send, %glService%		
+		multTabBack(7) 	
 	}
 	else {
-		multTab(17)
-		Sleep, 1000 
-		Send, %glService%
+		multTab(13)
 	}
+
+	Sleep, 1000 
+	Send, %glService%
 
 	FindVobe()
 	multTab(16)

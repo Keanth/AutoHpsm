@@ -35,9 +35,14 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include standardTroubleshoot.ahk
 #Include mailTroubleshoot.ahk
 #Include globalFunctions.ahk
+#Include vpnTroubleshoot.ahk
 
 ; [ MAIN ]
 ; ============================
 ^m::
 	createInitWindow()
+Return
+
+esc::
+	Gui, hide
 Return
