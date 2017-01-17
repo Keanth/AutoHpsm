@@ -1,5 +1,5 @@
 ; ===================================================================
-; [ Standard Troubleshoot ]
+; [ Hardware Troubleshoot ]
 
 ; Project:			HPSM, Beter Flow
 ; Author:			Kenneth
@@ -13,15 +13,17 @@
 ; ============================
 
 ; Function that generates the layout for the "Standard Troubleshoot"
-standardTroubleshootLayout() {
+hardwareTroubleshootLayout() {
 	global
 	Gui, Destroy
 
+	windowWidth:="w750"
+	windowHeight:="h670"
 	columnWidth:="w205"
 	columnGutter:="x30"
 	rowGutter:="y30"
 
-	Gui, Show, w500 h670, :D
+	Gui, Show, %windowWidth% %windowHeight%, :D
 
 	;==[ FIRST COLLUMN ]==
 	Gui, Add, Text, %columnGutter% y30 Left, Achternaam?
@@ -30,15 +32,19 @@ standardTroubleshootLayout() {
 	Gui, Add, Edit, %columnWidth% vNAME Left
 	Gui, Add, Text, Left, Telefoonnummer?
 	Gui, Add, Edit, %columnWidth% vPHONE Left
-	TextRadio2_1 := "Software"
-	TextRadio2_2 := "Windows"
-	TextRadio2_3 := "Outlook"
-	TextRadio2_4 := "Leeg laten"
+	TextRadio2_1 := "Hardware"
+	TextRadio2_2 := "iPhone"
+	TextRadio2_3 := "iPad"
+	TextRadio2_4 := "Android Phone"
+	TextRadio2_5 := "Android Tablet"
+	TextRadio2_6 := "Leeg laten"
 	Gui, Add, Text, Left, Service?
 	Gui, Add, Radio, vSERVICE , %TextRadio2_1%
 	Gui, Add, Radio, , %TextRadio2_2%
 	Gui, Add, Radio, , %TextRadio2_3%
 	Gui, Add, Radio, , %TextRadio2_4%
+	Gui, Add, Radio, , %TextRadio2_5%
+	Gui, Add, Radio, , %TextRadio2_6%
 	Gui, Add, Text,  Left, Tagnummer?
 	Gui, Add, Edit, %columnWidth% vTAG Left
 	Gui, Add, Text, Left, Lokaal / Verdiep?
@@ -55,7 +61,7 @@ standardTroubleshootLayout() {
 
 	;==[ SECOND COLLUMN ]==
 	Gui, Add, Text, %rowGutter% x265 Left, Script aanwezig?
-	Gui, Add, Checkbox, vSCRIPTAVAILABLE vSTANDARDTROUBLESHOOTSPLICE gSTANDARDTROUBLESHOOTSPLICE, Ja
+	Gui, Add, Checkbox, vSCRIPTAVAILABLE vHARDWARETROUBLESHOOTSPLICE gHARDWARETROUBLESHOOTSPLICE, Ja
 	Gui, Add, Text, Left , Script ID:
 	Gui, Add, Edit, %columnWidth% vSCRIPTID, %scriptID%
 	Gui, Add, Text, Left, Script gevolgd?
@@ -79,6 +85,29 @@ standardTroubleshootLayout() {
 	Gui, Add, Radio, , %TextRadio3_4%
 	Gui, Add, Radio, , %TextRadio3_5%
 
+	;==[ THIRD COLLUMN ]==
+	radioHardwareRandapparatuur_1 := "Ja"
+	radioHardwareRandapparatuur_2 := "Nee"
+	radioHardwareVerderWerken_1 := "Ja"
+	radioHardwareVerderWerken_2 := "Nee"
+	radioHardwareVerderWerken_3 := "Beperkt vervangtoestel"
+	radioHardwareSchade_1 := "Ja"
+	radioHardwareSchade_2 := "Nee"
+
+	Gui, Add, Text, %rowGutter% x500 Left, Randapparatuur defect?
+	Gui, Add, Text, y45 x500 Left, Foutmelding zonder gevolgen?
+	Gui, Add, Radio, vHardwareRandapparatuur , %radioHardwareRandapparatuur_1%
+	Gui, Add, Radio, , %radioHardwareRandapparatuur_2%
+
+	Gui, Add, Text, Left, Kan de gebruiker verder werken?
+	Gui, Add, Radio, vHardwareVerderWerken , %radioHardwareVerderWerken_1%
+	Gui, Add, Radio, , %radioHardwareVerderWerken_2%
+	Gui, Add, Radio, , %radioHardwareVerderWerken_3%
+
+	Gui, Add, Text, Left, Zichtbara fysieke schade?
+	Gui, Add, Radio, vHardwareSchade , %radioHardwareSchade_1%
+	Gui, Add, Radio, , %radioHardwareSchade_2%
+
 	;==[ BOTTOM ROW ]==
 	Gui, Add, Text, %columnGutter% y450 w440 Center, Korte omschrijving probleem?
 	Gui, Add, Edit, w440 Left vTITLE
@@ -87,21 +116,21 @@ standardTroubleshootLayout() {
 
 	Gui, Add, Text, x30 y625 Left, Solved?
 	Gui, Add, Checkbox, x80 y625 Left vISSOLVED 
-	Gui, Add, Button, x130 y610 w340 h40 vSTANDARDTROUBLESHOOTBUTTON gSTANDARDTROUBLESHOOTBUTTON Center, Press me
+	Gui, Add, Button, x130 y610 w340 h40 vHARDWARETROUBLESHOOTBUTTON gHARDWARETROUBLESHOOTBUTTON Center, Press me
 	return
 
-	STANDARDTROUBLESHOOTSPLICE:
+	HARDWARETROUBLESHOOTSPLICE:
 	Gui, Submit, NoHide
-	GuiControl, %    STANDARDTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTID
-	GuiControl, , SCRIPTID, %    STANDARDTROUBLESHOOTSPLICE ? "" : ""
-	GuiControl, %    STANDARDTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTFOLLOW
-	GuiControl, , SCRIPTFOLLOW, %    STANDARDTROUBLESHOOTSPLICE ? "" : ""
-	GuiControl, %    STANDARDTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTRESULT
-	GuiControl, , SCRIPTRESULT, %    STANDARDTROUBLESHOOTSPLICE ? "" : ""
+	GuiControl, %    HARDWARETROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTID
+	GuiControl, , SCRIPTID, %    HARDWARETROUBLESHOOTSPLICE ? "" : ""
+	GuiControl, %    HARDWARETROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTFOLLOW
+	GuiControl, , SCRIPTFOLLOW, %    HARDWARETROUBLESHOOTSPLICE ? "" : ""
+	GuiControl, %    HARDWARETROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTRESULT
+	GuiControl, , SCRIPTRESULT, %    HARDWARETROUBLESHOOTSPLICE ? "" : ""
 	return
 
 
-	STANDARDTROUBLESHOOTBUTTON:
+	HARDWARETROUBLESHOOTBUTTON:
 	{
 		Gui, Submit ;; Pull in all the variables to their global representative
 		glSurName := SURNAME
@@ -118,6 +147,10 @@ standardTroubleshootLayout() {
 		glScriptId := SCRIPTID
 		glScriptfollow := SCRIPTFOLLOW
 		glScriptResult := SCRIPTRESULT
+
+		glHardwareRandapparatuur := radioHardwareRandapparatuur_%glHardwareRandapparatuur%
+		glHardwareVerderWerken := radioHardwareVerderWerken_%glHardwareVerderWerken%
+		glHardwareSchade := radioHardwareSchade_%glHardwareSchade%
 
 		;; Dump everthing
 		GuiControl,,SCRIPTID,
@@ -144,9 +177,13 @@ standardTroubleshootLayout() {
 	}	
 }
 
-; Function which fills in the text for the "Standard Troubleshoot"
-standardTroubleshoot() {
+; Function which fills in the text for the "Hardware Troubleshoot"
+hardwareTroubleshoot() {
 	Send, ---KNOWLEDGE--- {enter}
+	Send, Randapparatuur defect? Foutmelding zonder gevolgen? %glHardwareRandapparatuur%
+	Send, Kan gebruiker verder werken? %glHardwareVerderWerken%
+	Send, Zichtbare fysieke schade? %glHardwareSchade%
+
 	Send, Script aanwezig: %glScriptAvailable% {enter}
 	Send, Script ID?: %glScriptId% {enter}
 	Send, Script gevolgd: %glScriptfollow% {enter}

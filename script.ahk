@@ -17,8 +17,12 @@
 
 ; [ Required files ]
 
-; 1.					standardTroubleshoot.ahk
-; 2.					globalFunctions.ahk
+; 1.					globalFunctions.ahk
+; 2.					standardTroubleshoot.ahk
+; 3. 					mailTroubleshoot.ahk
+; 4.					vpnTroubleshoot.ahk
+; 5.					hardwareTroubleshoot.ahk
+; 6.					enquiryTroubleshoot.ahk
 ; ===================================================================
 
 
@@ -36,6 +40,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include mailTroubleshoot.ahk
 #Include globalFunctions.ahk
 #Include vpnTroubleshoot.ahk
+#Include hardwareTroubleshoot.ahk
+#Include enquiryTroubleshoot.ahk
 
 ; [ MAIN ]
 ; ============================

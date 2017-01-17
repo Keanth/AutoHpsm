@@ -39,6 +39,11 @@ global glVpnReset:=""
 global glGebruikerVerder:=""
 global glProbleemGemeld:=""
 
+;; Hardware specific
+global glHardwareRandapparatuur:=""
+global glHardwareVerderWerken:=""
+global glHardwareSchade:=""
+
 ; [ FUNCTIONS ]
 ; ============================
 
@@ -50,19 +55,15 @@ createInitWindow() {
 
 	Gui, Add, Button, x30 y30 w440 h60 vSTANDAARDTROUBLESHOOT gSTANDAARDTROUBLESHOOT Center, Standaard Troubleshoot
 	Gui, Add, Button, w440 h60 vVPNTROUBLESHOOT gVPNTROUBLESHOOT Center, VPN Troubleshoot
+	Gui, Add, Button, w440 h60 vHARDWARETROUBLESHOOT gHARDWARETROUBLESHOOT Center, Hardware Troubleshoot
+	Gui, Add, Button, w440 h60 vENQUIRYTROUBLESHOOT gENQUIRYTROUBLESHOOT Center, Enquiry
 	Gui, Add, Button, w440 h60 vMAILTROUBLESHOOT gMAILTROUBLESHOOT Center, Mail Troubleshoot
-	
+
 	Return
 	STANDAARDTROUBLESHOOT:
 	{
 		Gui, Submit
 		standardTroubleshootLayout()
-		return
-	}
-	MAILTROUBLESHOOT:
-	{
-		Gui, Submit
-		mailTroubleshootLayout()
 		return
 	}
 	VPNTROUBLESHOOT:
@@ -71,6 +72,25 @@ createInitWindow() {
 		vpnTroubleshootLayout()
 		return
 	}
+	HARDWARETROUBLESHOOT:
+	{
+		Gui, Submit
+		hardwareTroubleshootLayout()
+		return
+	}
+	ENQUIRYTROUBLESHOOT:
+	{
+		Gui, Submit
+		enquiryTroubleshootLayout()
+		return
+	}
+	MAILTROUBLESHOOT:
+	{
+		Gui, Submit
+		mailTroubleshootLayout()
+		return
+	}
+	
 	return
 }
 
@@ -105,28 +125,47 @@ multTabBack(count) {
 	Send, %str%
 }
 
+
+; Function that runs alls the checks at once
+runChecks() {
+	;; Run checks
+	tagCheck()
+	priorityCheck()
+	serviceCheck()
+}
+
 ; Checks what the service is, and sets its accordingly
 serviceCheck() {
-	if (glService == "Software") {
-		if (glPriority != 5)
-			glService = wpaas - software (vobe){tab}{space}
-		else
-			glService = wpaas - software (vobe)
-	} else if (glService == "Windows") {
-		if (glPriority != 5)
-			glService = wpaas - windows 7 (vobe){tab}{space}
-		else
-			glService = wpaas - windows 7 (vobe)
-	} else if (glService == "Outlook") {
-		if (glPriority != 5)
-			glService = wpaas - outlook (vobe){tab}{space}
-		else
-			glService = wpaas - outlook (vobe)
-	} else if (glService == "Leeg laten") {
+	if (glService == ""){ 
 		glService = {tab}+{tab}	
-	} else {
-		glService = {tab}+{tab}	
+		Return
 	}
+
+	if (glService == "Software")
+		glService = wpaas - software (vobe)
+	else if (glService == "Windows")
+		glService = wpaas - windows 7 (vobe)
+	else if (glService == "Outlook")
+		glService = wpaas - outlook (vobe)
+	else if (glService == "Teleworking Software")
+		glService = wpaas - teleworking software (vobe)
+	else if (glService == "Teleworking Hardware")
+		glService = wpaas - teleworking connection (vobe)
+	else if (glService == "Hardware")
+		glService = wpaas - hardware (vobe)
+	else if (glService == "iPhone")
+		glService = wpaas - ios phone (vobe)
+	else if (glService == "iPad")
+		glService = wpaas - ios tablet (vobe)
+	else if (glService == "Android Phone")
+		glService = wpaas - android phone (vobe)
+	else if (glService == "Android Tablet")
+		glService = wpaas - android tablet (vobe)
+
+	if (glService == "Leeg laten")
+		glService = {tab}+{tab}	
+	else if (glPriority != 5)
+		glService = %glService%{tab}{space}	
 }
 
 ; Checks if the tag is correct
@@ -202,7 +241,7 @@ troubleshootSendTop() {
 	FindVobeForward()
 	
 	if (glPriority == 5) {
-		multTab(21)
+		multTab(20)
 		Send, {space}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{Down}{enter}
 		multTab(19)
 		Send, {Delete}
@@ -230,9 +269,27 @@ troubleshootSendTop() {
 	Send, %glSurName%, %glName% - %glTitleTag% %glTitle%
 	multTab(3)
 	Send, ^a {delete}
+
+	Send, --VALIDATIE---- {enter}
+	Send, Gebruikersgegevens gevalideerd: Ja {enter}
+	Send, telefoon: %glPhone% {enter}
+	Send, Lokaal/Verdiep: %glFloor% {enter}
+	Send, Bereikbaarheid: 16:00 {enter}
+	Send, BHV HPSM: %glBhv% {enter}
+	Send, Priomatrix gevolgd: Ja {enter}
+	Send, Hot Transfer? Nee {enter}
+	Send, {enter}
 }
 
 troubleshootSendBottom() {
+	Send, {enter}
+	Send, ---OWNERID--- {enter}
+	Send, 50050113 {enter}
+	Send, {enter}
+	Send, ---OMSCHRIJVING PROBLEEM--- {enter}
+	Send, %glDescription%
+	Sleep, 1000
+
 	Send, ^{tab}{tab}
 	Send, incident{tab}{tab}application{tab}{tab}performance degradation{tab}{tab}
 
@@ -267,6 +324,20 @@ troubleshootSendBottom() {
 	Send, ^a
 	Send, %glSurName%, %glName% 
 	Send, {tab}{space}
+}
+
+garbageCollector() {
+	Sleep, 2000
+    ; Dump everthing
+	GuiControl,,SCRIPTID, ""
+	GuiControl,,SCRIPTFOLLOW, ""
+	GuiControl,,SCRIPTRESULT, ""
+	glScriptAvailable = Nee
+
+	byeBye()
+	
+	gui Destroy
+	Reload
 }
 
 byeBye() {

@@ -30,9 +30,9 @@ vpnTroubleshootLayout() {
 	Gui, Add, Edit, %columnWidth% vNAME Left
 	Gui, Add, Text, Left, Telefoonnummer?
 	Gui, Add, Edit, %columnWidth% vPHONE Left
-	TextRadio2_1 := "Software"
-	TextRadio2_2 := "Windows"
-	TextRadio2_3 := "Outlook"
+	TextRadio2_1 := "Teleworking Software"
+	TextRadio2_2 := "Teleworking Hardware"
+	TextRadio2_3 := "Teleworking Connection"
 	TextRadio2_4 := "Leeg laten"
 	Gui, Add, Text, Left, Service?
 	Gui, Add, Radio, vSERVICE , %TextRadio2_1%
@@ -188,11 +188,6 @@ vpnTroubleshootLayout() {
 		glGebruikerVerder := radioGebruikerVerder_%GebruikerVerder%
 		glProbleemGemeld := radioProbleemGemeld_%ProbleemGemeld%
 
-		;; Dump everthing
-		GuiControl,,SCRIPTID, ""
-		GuiControl,,SCRIPTFOLLOW, ""
-		GuiControl,,SCRIPTRESULT, ""
-
 		if (%VPNTROUBLESHOOTSPLICE% == 0) 
 			glScriptAvailable = Nee
 		else 
@@ -208,25 +203,15 @@ vpnTroubleshootLayout() {
 		vpnTroubleshoot()
 		troubleshootSendBottom()
 
-		;; Kill the Gui | Bye bye
-		Sleep, 2000
-		; byeBye()
-		gui Destroy
+		;; Kill the Gui | Bye bye | Dump
+	    garbageCollector()
+
 		return
 	}	
 }
 
 ; Function which fills in the text for the "VPN Troubleshoot"
 vpnTroubleshoot() {
-	Send, --VALIDATIE---- {enter}
-	Send, Gebruikersgegevens gevalideerd: Ja {enter}
-	Send, telefoon: %glPhone% {enter}
-	Send, Lokaal/Verdiep: %glFloor% {enter}
-	Send, Bereikbaarheid: 16:00 {enter}
-	Send, BHV HPSM: %glBhv% {enter}
-	Send, Priomatrix gevolgd: Ja {enter}
-	Send, Hot Transfer? Nee {enter}
-	Send, {enter}
 	Send, ---KNOWLEDGE--- {enter}
 	Send, Script aanwezig: %glScriptAvailable% {enter}
 	Send, Script ID?: %glScriptId% {enter}
@@ -243,11 +228,4 @@ vpnTroubleshoot() {
 	Send, IP Adres: %glIpAdres% {enter}
 	Send, Kan gebruiker verder werken: %glGebruikerVerder% {enter}
 	Send, Probleem al eerder gemeld: %glProbleemGemeld% {enter}
-
-	Send, ---OWNERID--- {enter}
-	Send, 50050113 {enter}
-	Send, {enter}
-	Send, ---OMSCHRIJVING PROBLEEM--- {enter}
-	Send, %glDescription%
-	Sleep, 1000
 }
