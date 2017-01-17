@@ -43,6 +43,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	createInitWindow()
 Return
 
-esc::
-	Gui, hide
-Return
+; esc::
+; 	Gui, hide
+; Return

@@ -27,6 +27,18 @@ global glIsSolved:=""
 
 global glReport:="" ;; Implement later
 
+;; VPN specific
+global glIpAdres:=""
+global glInternetWerkt:=""
+global glAndereToestellen:=""
+global glConnectieMethode:=""
+global glEid:=""
+global glIeReset:=""
+global glAntiVirus:=""
+global glVpnReset:=""
+global glGebruikerVerder:=""
+global glProbleemGemeld:=""
+
 ; [ FUNCTIONS ]
 ; ============================
 

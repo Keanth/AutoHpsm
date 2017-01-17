@@ -21,10 +21,10 @@ vpnTroubleshootLayout() {
 	columnGutter:="x30"
 	rowGutter:="y30"
 
-	Gui, Show, w500 h670, :D
+	Gui, Show, w750 h670, :D
 
 	;==[ FIRST COLLUMN ]==
-	Gui, Add, Text, %columnGutter% y30 Left, Achternaam?
+	Gui, Add, Text, %columnGutter% %rowGutter% Left, Achternaam?
 	Gui, Add, Edit, %columnWidth% vSURNAME Left
 	Gui, Add, Text, Left, Voornaam?
 	Gui, Add, Edit, %columnWidth% vNAME Left
@@ -79,6 +79,65 @@ vpnTroubleshootLayout() {
 	Gui, Add, Radio, , %TextRadio3_4%
 	Gui, Add, Radio, , %TextRadio3_5%
 
+	;==[ THIRD COLLUMN ]==
+	radioInternetWerkt_1 := "Ja"
+	radioInternetWerkt_2 := "Nee"
+	radioAndereToestellen_1 := "Ja"
+	radioAndereToestellen_2 := "Nee"
+	radioConnectieMethode_1 := "Draadloos"
+	radioConnectieMethode_2 := "Kabel"
+	radioEid_1 := "EID"
+	radioEid_2 := "Federaal Token"
+	radioIeReset_1 := "Ja"
+	radioIeReset_2 := "Nee"
+	radioAntiVirus_1 := "Ja"
+	radioAntiVirus_2 := "Nee"
+	radioVpnReset_1 := "Ja"
+	radioVpnReset_2 := "Nee"
+	radioGebruikerVerder_1 := "Ja"
+	radioGebruikerVerder_2 := "Nee"
+	radioProbleemGemeld_1 := "Ja"
+	radioProbleemGemeld_2 := "Nee"
+
+	Gui, Add, Text, %rowGutter% x500 Left , IP Adres:
+	Gui, Add, Edit, %columnWidth% vIPADRES Left
+
+	Gui, Add, Text, Left, Internet Werkt?
+	Gui, Add, Radio, vInternetWerkt , %radioInternetWerkt_1%
+	Gui, Add, Radio, , %radioInternetWerkt_2%
+
+	Gui, Add, Text, Left, Andere toestellen met internetverbinding?
+	Gui, Add, Radio, vAndereToestellen , %radioAndereToestellen_1%
+	Gui, Add, Radio, , %radioAndereToestellen_2%
+
+	Gui, Add, Text, Left, Connectiemethode?
+	Gui, Add, Radio, vConnectieMethode , %radioConnectieMethode_1%
+	Gui, Add, Radio, , %radioConnectieMethode_2%
+
+	Gui, Add, Text, Left, EID of Federaal Token?
+	Gui, Add, Radio, vEid , %radioEid_1%
+	Gui, Add, Radio, , %radioEid_2%
+
+	Gui, Add, Text, Left, Internet Explorer reset?
+	Gui, Add, Radio, vIeReset , %radioIeReset_1%
+	Gui, Add, Radio, , %radioIeReset_2%
+
+	Gui, Add, Text, Left, Anti-Virus goed verbonden?
+	Gui, Add, Radio, vAntiVirus , %radioAntiVirus_1%
+	Gui, Add, Radio, , %radioAntiVirus_2%
+
+	Gui, Add, Text, Left, VPN opnieuw geinstalleerd?
+	Gui, Add, Radio, vVpnReset , %radioVpnReset_1%
+	Gui, Add, Radio, , %radioVpnReset_2%
+
+	Gui, Add, Text, Left, Kan gebruiker verder werken?
+	Gui, Add, Radio, vGebruikerVerder , %radioGebruikerVerder_1%
+	Gui, Add, Radio, , %radioGebruikerVerder_2%
+
+	Gui, Add, Text, Left, Probleem al eerder gemeld?
+	Gui, Add, Radio, vProbleemGemeld , %radioProbleemGemeld_1%
+	Gui, Add, Radio, , %radioProbleemGemeld_2%
+
 	;==[ BOTTOM ROW ]==
 	Gui, Add, Text, %columnGutter% y450 w440 Center, Korte omschrijving probleem?
 	Gui, Add, Edit, w440 Left vTITLE
@@ -91,15 +150,14 @@ vpnTroubleshootLayout() {
 	return
 
 	VPNTROUBLESHOOTSPLICE:
-	Gui, Submit, NoHide[]
-	GuiControl, %    VPNTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTID
-	GuiControl, , SCRIPTID, %    VPNTROUBLESHOOTSPLICE ? "" : ""
-	GuiControl, %    VPNTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTFOLLOW
-	GuiControl, , SCRIPTFOLLOW, %    VPNTROUBLESHOOTSPLICE ? "" : ""
-	GuiControl, %    VPNTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTRESULT
-	GuiControl, , SCRIPTRESULT, %    VPNTROUBLESHOOTSPLICE ? "" : ""
+		Gui, Submit, NoHide
+		GuiControl, %    VPNTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTID
+		GuiControl, , SCRIPTID, %    VPNTROUBLESHOOTSPLICE ? "" : ""
+		GuiControl, %    VPNTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTFOLLOW
+		GuiControl, , SCRIPTFOLLOW, %    VPNTROUBLESHOOTSPLICE ? "" : ""
+		GuiControl, %    VPNTROUBLESHOOTSPLICE ? "Enable" : "Disable", SCRIPTRESULT
+		GuiControl, , SCRIPTRESULT, %    VPNTROUBLESHOOTSPLICE ? "" : ""
 	return
-
 
 	VPNTROUBLESHOOTBUTTON:
 	{
@@ -119,12 +177,23 @@ vpnTroubleshootLayout() {
 		glScriptfollow := SCRIPTFOLLOW
 		glScriptResult := SCRIPTRESULT
 
-		;; Dump everthing
-		GuiControl,,SCRIPTID,
-		GuiControl,,SCRIPTFOLLOW,
-		GuiControl,,SCRIPTRESULT,
+		glIpAdres := IPADRES
+		glInternetWerkt := radioInternetWerkt_%InternetWerkt%
+		glAndereToestellen := radioAndereToestellen_%AndereToestellen%
+		glConnectieMethode := radioConnectieMethode_%ConnectieMethode%
+		glEid := radioEid_%Eid%
+		glIeReset := radioIeReset_%IeReset%
+		glAntiVirus := radioAntiVirus_%AntiVirus%
+		glVpnReset := radioVpnReset_%VpnReset%
+		glGebruikerVerder := radioGebruikerVerder_%GebruikerVerder%
+		glProbleemGemeld := radioProbleemGemeld_%ProbleemGemeld%
 
-		if (%SCRIPTAVAILABLE% == 0) 
+		;; Dump everthing
+		GuiControl,,SCRIPTID, ""
+		GuiControl,,SCRIPTFOLLOW, ""
+		GuiControl,,SCRIPTRESULT, ""
+
+		if (%VPNTROUBLESHOOTSPLICE% == 0) 
 			glScriptAvailable = Nee
 		else 
 			glScriptAvailable = Ja
@@ -163,6 +232,18 @@ vpnTroubleshoot() {
 	Send, Script ID?: %glScriptId% {enter}
 	Send, Script gevolgd: %glScriptfollow% {enter}
 	Send, Uitkomst script: %glScriptResult% {enter}
+
+	Send, Internet: %glInternetWerkt% {enter}
+	Send, Andere toestellen hebben internet: %glAndereToestellen% {enter}
+	Send, Connectiemethode: %glConnectieMethode% {enter}
+	Send, EID of Federaal token: %glEid% {enter}
+	Send, Internet Explorer reset: %glIeReset% {enter}
+	Send, Anti-Virus goed verbonden: %glAntiVirus% {enter}
+	Send, VPN opnieuw geinstalleerd: %glVpnReset% {enter}
+	Send, IP Adres: %glIpAdres% {enter}
+	Send, Kan gebruiker verder werken: %glGebruikerVerder% {enter}
+	Send, Probleem al eerder gemeld: %glProbleemGemeld% {enter}
+
 	Send, ---OWNERID--- {enter}
 	Send, 50050113 {enter}
 	Send, {enter}
