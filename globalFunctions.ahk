@@ -150,6 +150,8 @@ serviceCheck() {
 	else if (glService == "Teleworking Software")
 		glService = wpaas - teleworking software (vobe)
 	else if (glService == "Teleworking Hardware")
+		glService = wpaas - teleworking hardware (vobe)
+	else if (glService == "Teleworking Connection")
 		glService = wpaas - teleworking connection (vobe)
 	else if (glService == "Hardware")
 		glService = wpaas - hardware (vobe)
@@ -334,7 +336,7 @@ garbageCollector() {
 	GuiControl,,SCRIPTRESULT, ""
 	glScriptAvailable = Nee
 
-	byeBye()
+	; byeBye()
 	
 	gui Destroy
 	Reload
