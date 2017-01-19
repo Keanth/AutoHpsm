@@ -124,7 +124,7 @@ standardTroubleshootLayout() {
 		GuiControl,,SCRIPTFOLLOW,
 		GuiControl,,SCRIPTRESULT,
 
-		if (%SCRIPTAVAILABLE% == 0) 
+		if (%STANDARDTROUBLESHOOTSPLICE% == 0) 
 			glScriptAvailable = Nee
 		else 
 			glScriptAvailable = Ja
