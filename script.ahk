@@ -43,10 +43,16 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include hardwareTroubleshoot.ahk
 #Include enquiryTroubleshoot.ahk
 
+#Include template.ahk
+
 ; [ MAIN ]
 ; ============================
 ^m::
 	createInitWindow()
+Return
+
+^l::
+	CreateTemplate()
 Return
 
 ; esc::

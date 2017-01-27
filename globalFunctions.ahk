@@ -147,6 +147,8 @@ serviceCheck() {
 		glService = wpaas - windows 7 (vobe)
 	else if (glService == "Outlook")
 		glService = wpaas - outlook (vobe)
+	Else if (glService == "Skype")
+		glService = wpaas - lync (vobe)
 	else if (glService == "Teleworking Software")
 		glService = wpaas - teleworking software (vobe)
 	else if (glService == "Teleworking Hardware")
@@ -207,7 +209,7 @@ FindVobe() {
 		Send ^c
 		ClipWait, 1
 		if (clipboard == "VOBE") {
-			Sleep, 750 
+			Sleep, 250 
 			Break
 		} else {
 			Send, ^+{tab}
@@ -222,7 +224,7 @@ FindVobeForward() {
 		Send ^c
 		ClipWait, 1
 		if (clipboard == "VOBE") {
-			Sleep, 750 
+			Sleep, 250 
 			Break
 		} else {
 			Send, ^{tab}
@@ -307,7 +309,7 @@ troubleshootSendBottom() {
 		Send, Solved
 		multTab(6)
 		Send, %glDescription%
-		Send, {enter}
+		Send, {enter}{enter}
 		Send, GAS
 	} 
 	else 

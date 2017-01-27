@@ -33,12 +33,16 @@ standardTroubleshootLayout() {
 	TextRadio2_1 := "Software"
 	TextRadio2_2 := "Windows"
 	TextRadio2_3 := "Outlook"
-	TextRadio2_4 := "Leeg laten"
+	TextRadio2_4 := "Skype"
+	TextRadio2_5 := "Skype Script 510"
+	TextRadio2_6 := "Leeg laten"
 	Gui, Add, Text, Left, Service?
 	Gui, Add, Radio, vSERVICE , %TextRadio2_1%
 	Gui, Add, Radio, , %TextRadio2_2%
 	Gui, Add, Radio, , %TextRadio2_3%
 	Gui, Add, Radio, , %TextRadio2_4%
+	Gui, Add, Radio, , %TextRadio2_5%
+	Gui, Add, Radio, , %TextRadio2_6%
 	Gui, Add, Text,  Left, Tagnummer?
 	Gui, Add, Edit, %columnWidth% vTAG Left
 	Gui, Add, Text, Left, Lokaal / Verdiep?
@@ -47,14 +51,14 @@ standardTroubleshootLayout() {
 	TextRadio1_2 := "Basis"
 	TextRadio1_3 := "Uitgebreid"
 	TextRadio1_4 := "Niet gekend"
-	Gui, Add, Text, Left, BHV?
+	Gui, Add, Text, %rowGutter% x265 Left, BHV?
 	Gui, Add, Radio, vBHV , %TextRadio1_1%
 	Gui, Add, Radio, , %TextRadio1_2%
 	Gui, Add, Radio, , %TextRadio1_3%
 	Gui, Add, Radio, , %TextRadio1_4%
 
 	;==[ SECOND COLLUMN ]==
-	Gui, Add, Text, %rowGutter% x265 Left, Script aanwezig?
+	Gui, Add, Text, Left, Script aanwezig?
 	Gui, Add, Checkbox, vSCRIPTAVAILABLE vSTANDARDTROUBLESHOOTSPLICE gSTANDARDTROUBLESHOOTSPLICE, Ja
 	Gui, Add, Text, Left , Script ID:
 	Gui, Add, Edit, %columnWidth% vSCRIPTID, %scriptID%
@@ -119,6 +123,12 @@ standardTroubleshootLayout() {
 		glScriptfollow := SCRIPTFOLLOW
 		glScriptResult := SCRIPTRESULT
 
+		if (glService == "Skype Script 510") {
+			glPriority = Priority 5
+			glTitle = Verbindingsprobleem met Skype/Lync
+			glDescription = Gebruiker meldt dat Skype niet wil verbinden met de server {enter}{enter}Script 510 toegepast{enter}{tab}- Cache leeggemaakt{enter}{tab}-> Gebruiker kan terug aanmelden
+		}
+
 		;; Dump everthing
 		GuiControl,,SCRIPTID,
 		GuiControl,,SCRIPTFOLLOW,
@@ -128,6 +138,13 @@ standardTroubleshootLayout() {
 			glScriptAvailable = Nee
 		else 
 			glScriptAvailable = Ja
+
+		if (glService == "Skype Script 510") {
+			glScriptId = 510
+			glScriptfollow = Ja
+			glScriptResult = Succesvol
+			glScriptAvailable = Ja
+		}
 
 		;; Run checks
 		runChecks()

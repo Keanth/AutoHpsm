@@ -167,7 +167,7 @@ hardwareTroubleshootLayout() {
 
 		;; Run troubleshoot text
 		troubleshootSendTop()
-		standardTroubleshoot()
+		hardwareTroubleshoot()
 		troubleshootSendBottom()
 
 		;; Kill the Gui | Bye bye | Dump
@@ -180,9 +180,9 @@ hardwareTroubleshootLayout() {
 ; Function which fills in the text for the "Hardware Troubleshoot"
 hardwareTroubleshoot() {
 	Send, ---KNOWLEDGE--- {enter}
-	Send, Randapparatuur defect? Foutmelding zonder gevolgen? %glHardwareRandapparatuur%
-	Send, Kan gebruiker verder werken? %glHardwareVerderWerken%
-	Send, Zichtbare fysieke schade? %glHardwareSchade%
+	Send, Randapparatuur defect? Foutmelding zonder gevolgen? %glHardwareRandapparatuur% {enter}
+	Send, Kan gebruiker verder werken? %glHardwareVerderWerken% {enter}
+	Send, Zichtbare fysieke schade? %glHardwareSchade% {enter}
 
 	Send, Script aanwezig: %glScriptAvailable% {enter}
 	Send, Script ID?: %glScriptId% {enter}
